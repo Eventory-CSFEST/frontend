@@ -12,10 +12,7 @@ import {
   FileDown,
   X,
   CalendarDays,
-<<<<<<< HEAD
-=======
   Search,
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
 } from "lucide-react";
 import api, { getStorageUrl } from "@/lib/api";
 import { exportEventsReportPdf } from "@/lib/exportPdf";
@@ -71,11 +68,6 @@ export default function AdminEventsPage() {
   const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
 
-<<<<<<< HEAD
-  // State Modal Filter Laporan PDF
-  const [pdfModalOpen, setPdfModalOpen] = useState(false);
-  const [filterMode, setFilterMode] = useState("all"); // 'all' | 'date' | 'week'
-=======
   // State Pencarian & Filter Tabel Acara
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
@@ -84,7 +76,6 @@ export default function AdminEventsPage() {
   // State Modal Filter Laporan PDF
   const [pdfModalOpen, setPdfModalOpen] = useState(false);
   const [filterMode, setFilterMode] = useState("all");
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
   const [selectedDate, setSelectedDate] = useState(getCurrentDateValue);
   const [weekStartDate, setWeekStartDate] = useState(getCurrentDateValue);
 
@@ -131,8 +122,6 @@ export default function AdminEventsPage() {
     }
   };
 
-<<<<<<< HEAD
-=======
   const filteredEvents = useMemo(() => {
     return events.filter((ev) => {
       const q = searchQuery.toLowerCase();
@@ -145,7 +134,6 @@ export default function AdminEventsPage() {
     });
   }, [events, searchQuery, statusFilter, typeFilter]);
 
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
   const openEditAndManage = (id) => {
     sessionStorage.setItem("admin_event_id", String(id));
     router.push("/admin/events/detail");
@@ -166,10 +154,6 @@ export default function AdminEventsPage() {
     }
   };
 
-<<<<<<< HEAD
-  // Hitung hasil filter acara & label periode untuk PDF
-=======
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
   const pdfFilterResult = useMemo(() => {
     if (filterMode === "date") {
       const range = getDateRange(selectedDate);
@@ -317,8 +301,6 @@ export default function AdminEventsPage() {
         </div>
       </div>
 
-<<<<<<< HEAD
-=======
       {/* Pencarian & Filter Acara */}
       <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-5">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
@@ -360,7 +342,6 @@ export default function AdminEventsPage() {
         </div>
       </div>
 
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
       {errorMsg && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-2xl">
           {errorMsg}
@@ -373,18 +354,11 @@ export default function AdminEventsPage() {
           <p className="p-8 text-center text-sm text-slate-500">
             Memuat data acara...
           </p>
-<<<<<<< HEAD
-        ) : events.length === 0 ? (
-          <p className="p-8 text-center text-sm text-slate-500">
-            Belum ada acara dibuat. Klik &quot;+ Tambah Acara&quot; untuk
-            memulai.
-=======
         ) : filteredEvents.length === 0 ? (
           <p className="p-8 text-center text-sm text-slate-500">
             {events.length === 0
               ? 'Belum ada acara dibuat. Klik "+ Tambah Acara" untuk memulai.'
               : "Tidak ada acara yang cocok dengan kata kunci atau filter tersebut."}
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
           </p>
         ) : (
           <table className="w-full text-sm text-left">
@@ -394,20 +368,12 @@ export default function AdminEventsPage() {
                 <th className="p-4">Jenis</th>
                 <th className="p-4">Status</th>
                 <th className="p-4">Sertifikat</th>
-<<<<<<< HEAD
-                <th className="p-4">Peserta (Daftar / Absen)</th>
-=======
                 <th className="p-4">Peserta &amp; Kuota</th>
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
                 <th className="p-4 text-right">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-<<<<<<< HEAD
-              {events.map((ev) => (
-=======
               {filteredEvents.map((ev) => (
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
                 <tr key={ev.id} className="hover:bg-slate-50/70">
                   <td className="p-4">
                     <div className="flex items-center gap-3">
@@ -463,12 +429,8 @@ export default function AdminEventsPage() {
                     <div className="flex items-center gap-2 text-xs">
                       <span className="inline-flex items-center gap-1 font-semibold text-slate-700">
                         <Users className="w-3.5 h-3.5 text-slate-400" />
-<<<<<<< HEAD
-                        {ev.participants_count || 0} daftar
-=======
                         {ev.participants_count || 0}
                         {ev.max_participants ? ` / ${ev.max_participants}` : ""} daftar
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
                       </span>
                       <span className="text-slate-300">|</span>
                       <span className="font-semibold text-emerald-700">
@@ -483,7 +445,7 @@ export default function AdminEventsPage() {
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-semibold hover:bg-indigo-100"
                       >
                         <Pencil className="w-3.5 h-3.5" />
-                        Edit &amp; Kelola
+                        Edit 
                       </button>
                       <button
                         onClick={() => handleDelete(ev.id, ev.title)}
@@ -520,10 +482,6 @@ export default function AdminEventsPage() {
               </button>
             </div>
 
-<<<<<<< HEAD
-            {/* Pilihan Periode */}
-=======
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
             <div className="space-y-2">
               <label className="block text-xs font-semibold text-slate-600 uppercase">
                 Pilih Periode Laporan
@@ -565,10 +523,6 @@ export default function AdminEventsPage() {
               </div>
             </div>
 
-<<<<<<< HEAD
-            {/* Input Tanggal Spesifik */}
-=======
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
             {filterMode === "date" && (
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1.5">
@@ -583,10 +537,6 @@ export default function AdminEventsPage() {
               </div>
             )}
 
-<<<<<<< HEAD
-            {/* Input Per 1 Minggu (7 Hari dari Tanggal Mulai) */}
-=======
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
             {filterMode === "week" && (
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -625,10 +575,6 @@ export default function AdminEventsPage() {
               </div>
             )}
 
-<<<<<<< HEAD
-            {/* Info Preview Jumlah Data */}
-=======
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
             <div
               className={`p-3.5 rounded-xl border text-xs ${
                 pdfFilterResult.list.length > 0
@@ -650,10 +596,6 @@ export default function AdminEventsPage() {
               )}
             </div>
 
-<<<<<<< HEAD
-            {/* Tombol Aksi Modal */}
-=======
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
             <div className="flex items-center justify-end gap-2 pt-1">
               <button
                 type="button"
