@@ -445,7 +445,7 @@ export default function AdminEventsPage() {
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-semibold hover:bg-indigo-100"
                       >
                         <Pencil className="w-3.5 h-3.5" />
-                        Edit 
+                        Edit &amp; Kelola
                       </button>
                       <button
                         onClick={() => handleDelete(ev.id, ev.title)}
