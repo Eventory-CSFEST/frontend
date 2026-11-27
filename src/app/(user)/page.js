@@ -2,32 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-<<<<<<< HEAD
-import { useRouter } from "next/navigation";
-import {
-  Search,
-  Calendar,
-  MapPin,
-  Users,
-  Award,
-  QrCode,
-  Ticket,
-  Sparkles,
-  ArrowRight,
-  CheckCircle2,
-  Compass,
-} from "lucide-react";
-import api, { getStorageUrl } from "@/lib/api";
-
-export default function HomePage() {
-  const [events, setEvents] = useState([]);
-  const [search, setSearch] = useState("");
-  const [filterType, setFilterType] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
-  const router = useRouter();
-=======
 import {
   Award,
   QrCode,
@@ -38,7 +12,6 @@ import {
 
 export default function HomePage() {
   const [user, setUser] = useState(null);
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -49,122 +22,6 @@ export default function HomePage() {
     }
   }, []);
 
-<<<<<<< HEAD
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchEvents = async () => {
-      try {
-        const params = {};
-
-        if (filterType) params.type = filterType;
-        if (filterStatus) params.status = filterStatus;
-
-        const res = await api.get("/events", { params });
-
-        if (isMounted) {
-          setEvents(res.data.data || []);
-        }
-      } catch (error) {
-        console.error("Gagal mengambil data event:", error);
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    setLoading(true);
-    fetchEvents();
-
-    const interval = setInterval(fetchEvents, 60000);
-
-    return () => {
-      isMounted = false;
-      clearInterval(interval);
-    };
-  }, [filterType, filterStatus]);
-
-  const filteredEvents = events.filter(
-    (ev) =>
-      ev.title.toLowerCase().includes(search.toLowerCase()) ||
-      ev.location_or_link.toLowerCase().includes(search.toLowerCase()),
-  );
-
-  const openDetail = (id) => {
-    sessionStorage.setItem("selected_event_id", String(id));
-    router.push("/events/detail");
-  };
-
-  const scrollToEvents = () => {
-    const el = document.getElementById("katalog-acara");
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const getStatusBadge = (status) => {
-    if (status === "berlangsung")
-      return "bg-emerald-50 text-emerald-700 border-emerald-200";
-    if (status === "akan_datang")
-      return "bg-amber-50 text-amber-700 border-amber-200";
-    return "bg-slate-100 text-slate-600 border-slate-200";
-  };
-
-  return (
-    <div className="space-y-16">
-      {/* 1. HERO SECTION (Awalan & Pengenalan Utama) */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-slate-900 text-white rounded-3xl p-8 sm:p-14 shadow-lg">
-        <div className="max-w-3xl relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-sm text-indigo-100 text-xs font-semibold mb-6">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Smart Campus Event Management Platform</span>
-          </div>
-
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-5">
-            Satu Platform untuk Semua Kegiatan &amp; Acara Kampus.
-          </h1>
-
-          <p className="text-base sm:text-lg text-indigo-100 leading-relaxed mb-8 max-w-2xl">
-            <strong>Eventory</strong> adalah portal terintegrasi yang memudahkan
-            mahasiswa menemukan seminar, workshop, dan lomba kampus, mendaftar
-            dalam satu klik, melakukan presensi cepat via QR Code, hingga
-            mengunduh sertifikat digital secara otomatis.
-          </p>
-
-          <div className="flex flex-wrap items-center gap-3.5">
-            <button
-              onClick={scrollToEvents}
-              className="inline-flex items-center gap-2 px-6 py-3.5 bg-white text-indigo-700 rounded-xl font-bold text-sm hover:bg-indigo-50 transition shadow-sm"
-            >
-              Jelajahi Acara
-              <ArrowRight className="w-4 h-4" />
-            </button>
-
-            {!user ? (
-              <Link
-                href="/register"
-                className="inline-flex items-center gap-2 px-6 py-3.5 bg-indigo-500/40 border border-white/30 text-white rounded-xl font-semibold text-sm hover:bg-indigo-500/60 transition"
-              >
-                Daftar Akun Gratis
-              </Link>
-            ) : (
-              <Link
-                href={user.role === "admin" ? "/admin/events" : "/attend"}
-                className="inline-flex items-center gap-2 px-6 py-3.5 bg-indigo-500/40 border border-white/30 text-white rounded-xl font-semibold text-sm hover:bg-indigo-500/60 transition"
-              >
-                {user.role === "admin" ? "Buka Panel Admin" : "Isi Presensi QR"}
-              </Link>
-            )}
-          </div>
-        </div>
-
-        {/* Dekorasi Latar Belakang */}
-        <div className="hidden lg:block absolute -right-16 -bottom-16 w-80 h-80 rounded-full bg-indigo-500/30 blur-2xl" />
-        <div className="hidden lg:block absolute right-24 top-10 w-44 h-44 rounded-full bg-sky-400/20 blur-xl" />
-      </section>
-
-      {/* 2. PENJELASAN WEBSITE & FITUR UTAMA */}
-      <section className="space-y-8">
-=======
   const secondaryHref = !user
     ? "/register"
     : user.role === "admin"
@@ -243,16 +100,11 @@ export default function HomePage() {
 
       {/* 2. PENJELASAN WEBSITE & FITUR UTAMA */}
       <section id="fitur" className="space-y-8">
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
         <div className="text-center max-w-2xl mx-auto">
           <span className="text-xs font-bold uppercase tracking-widest text-indigo-600">
             Tentang Eventory
           </span>
-<<<<<<< HEAD
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">
-=======
           <h2 className="text-2xl sm:text-3xl font-bold text-indigo-950 mt-1">
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
             Mengapa Menggunakan Eventory?
           </h2>
           <p className="text-sm sm:text-base text-slate-500 mt-2">
@@ -318,23 +170,15 @@ export default function HomePage() {
       </section>
 
       {/* 3. ALUR PENGGUNAAN (Cara Kerja untuk Mahasiswa) */}
-<<<<<<< HEAD
-      <section className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-sm">
-=======
       <section
         id="cara-kerja"
         className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-sm"
       >
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
         <div className="text-center max-w-xl mx-auto mb-8">
           <span className="text-xs font-bold uppercase tracking-widest text-indigo-600">
             Cara Kerja
           </span>
-<<<<<<< HEAD
-          <h2 className="text-2xl font-bold text-slate-900 mt-1">
-=======
           <h2 className="text-2xl font-bold text-indigo-950 mt-1">
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
             4 Langkah Mudah Mengikuti Acara
           </h2>
         </div>
@@ -349,11 +193,7 @@ export default function HomePage() {
             {
               step: "02",
               title: "Pilih & Daftar Acara",
-<<<<<<< HEAD
-              desc: "Temukan acara yang diminati pada katalog di bawah lalu klik Daftar Acara.",
-=======
               desc: "Temukan acara yang diminati pada katalog acara lalu klik Daftar Acara.",
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
             },
             {
               step: "03",
@@ -385,8 +225,4 @@ export default function HomePage() {
       </section>
     </div>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9

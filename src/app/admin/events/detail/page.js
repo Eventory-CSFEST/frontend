@@ -1,10 +1,6 @@
 "use client";
 
-<<<<<<< HEAD
-import { useEffect, useState } from "react";
-=======
 import { useEffect, useMemo, useState } from "react";
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
 import { useRouter } from "next/navigation";
 import { QRCodeSVG } from "qrcode.react";
 import {
@@ -15,10 +11,6 @@ import {
   Users,
   UserCheck,
   Save,
-<<<<<<< HEAD
-} from "lucide-react";
-import api, { getStorageUrl } from "@/lib/api";
-=======
   Eye,
   Award,
   Send,
@@ -39,7 +31,6 @@ import {
   exportEventParticipantsPdf,
   exportEventParticipantsCsv,
 } from "@/lib/exportPdf";
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
 
 function formatForDateTimeLocal(dateStr) {
   if (!dateStr) return "";
@@ -55,19 +46,11 @@ export default function AdminEventDetailPage() {
   const [event, setEvent] = useState(null);
   const [participants, setParticipants] = useState([]);
   const [attended, setAttended] = useState([]);
-<<<<<<< HEAD
-=======
   const [announcements, setAnnouncements] = useState([]);
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
 
   const [newThumbnail, setNewThumbnail] = useState(null);
   const [thumbPreview, setThumbPreview] = useState(null);
   const [newCertTemplate, setNewCertTemplate] = useState(null);
-<<<<<<< HEAD
-  const [saving, setSaving] = useState(false);
-  const [copied, setCopied] = useState(false);
-
-=======
   const [certPreview, setCertPreview] = useState(null);
   const [saving, setSaving] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -107,7 +90,6 @@ export default function AdminEventDetailPage() {
     }
   };
 
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
   const loadAll = async (id) => {
     try {
       const [evRes, partRes, attRes] = await Promise.all([
@@ -120,17 +102,11 @@ export default function AdminEventDetailPage() {
         ...data,
         event_date_input: formatForDateTimeLocal(data.event_date),
         end_date_input: formatForDateTimeLocal(data.end_date),
-<<<<<<< HEAD
-      });
-      setParticipants(partRes.data.data || []);
-      setAttended(attRes.data.data || []);
-=======
         max_participants_input: data.max_participants ?? "",
       });
       setParticipants(partRes.data.data || []);
       setAttended(attRes.data.data || []);
       await loadAnnouncements(id);
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
     } catch (_) {
       router.push("/admin/events");
     }
@@ -153,15 +129,6 @@ export default function AdminEventDetailPage() {
     loadAll(savedId);
   }, [router]);
 
-<<<<<<< HEAD
-  const handleThumbnailChange = (e) => {
-    const file = e.target.files?.[0] || null;
-    setNewThumbnail(file);
-    if (file) {
-      setThumbPreview(URL.createObjectURL(file));
-    } else {
-      setThumbPreview(null);
-=======
   const filteredRegistered = useMemo(() => {
     const q = registeredSearch.toLowerCase();
     return participants.filter(
@@ -197,7 +164,6 @@ export default function AdminEventDetailPage() {
       setCertPreview(URL.createObjectURL(file));
     } else {
       setCertPreview(null);
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
     }
   };
 
@@ -221,17 +187,10 @@ export default function AdminEventDetailPage() {
       formData.append("location_or_link", event.location_or_link);
       formData.append("event_date", event.event_date_input);
       formData.append("end_date", event.end_date_input);
-<<<<<<< HEAD
-      formData.append("has_certificate", event.has_certificate ? "1" : "0");
-
-      if (newThumbnail) formData.append("thumbnail", newThumbnail);
-
-=======
       formData.append("max_participants", event.max_participants_input ?? "");
       formData.append("has_certificate", event.has_certificate ? "1" : "0");
 
       if (newThumbnail) formData.append("thumbnail", newThumbnail);
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
       if (newCertTemplate)
         formData.append("certificate_template", newCertTemplate);
 
@@ -240,10 +199,7 @@ export default function AdminEventDetailPage() {
       setNewThumbnail(null);
       setThumbPreview(null);
       setNewCertTemplate(null);
-<<<<<<< HEAD
-=======
       setCertPreview(null);
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
       alert("Perubahan acara berhasil disimpan!");
       loadAll(eventId);
     } catch (err) {
@@ -260,8 +216,6 @@ export default function AdminEventDetailPage() {
     }
   };
 
-<<<<<<< HEAD
-=======
   // Presensi Manual oleh Admin
   const handleMarkAttended = async (participantId, name) => {
     if (!confirm(`Tandai "${name}" sebagai HADIR secara manual?`)) return;
@@ -301,7 +255,6 @@ export default function AdminEventDetailPage() {
     }
   };
 
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
   const handleRemoveParticipant = async (participantId, name) => {
     if (!confirm(`Hapus peserta "${name}" dari daftar acara ini?`)) return;
     try {
@@ -312,8 +265,6 @@ export default function AdminEventDetailPage() {
     }
   };
 
-<<<<<<< HEAD
-=======
   // Broadcast Pengumuman
   const handleSendBroadcast = async (e) => {
     e.preventDefault();
@@ -476,7 +427,6 @@ export default function AdminEventDetailPage() {
     img.src = url;
   };
 
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
   const copyToken = () => {
     navigator.clipboard.writeText(event.qr_token);
     setCopied(true);
@@ -491,17 +441,6 @@ export default function AdminEventDetailPage() {
     );
   }
 
-<<<<<<< HEAD
-  return (
-    <div className="space-y-8">
-      <button
-        onClick={() => router.push("/admin/events")}
-        className="flex items-center gap-1.5 text-sm font-medium text-indigo-600 hover:underline"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Kembali ke Dashboard Admin
-      </button>
-=======
   const activeTemplateUrl =
     certPreview ||
     (event.certificate_template
@@ -576,17 +515,12 @@ export default function AdminEventDetailPage() {
           </button>
         </div>
       </div>
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
 
       {/* Bagian 1: Form Edit Acara & QR Code Presensi */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <form
           onSubmit={handleUpdate}
-<<<<<<< HEAD
-          className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4"
-=======
           className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 print:hidden"
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
         >
           <h2 className="text-xl font-bold text-slate-900">
             Edit Detail &amp; Pengaturan Acara
@@ -620,11 +554,7 @@ export default function AdminEventDetailPage() {
             />
           </div>
 
-<<<<<<< HEAD
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-=======
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
             <div>
               <label className="block text-xs font-semibold text-slate-600 mb-1">
                 Jenis Acara
@@ -641,11 +571,6 @@ export default function AdminEventDetailPage() {
 
             <div>
               <label className="block text-xs font-semibold text-slate-600 mb-1">
-<<<<<<< HEAD
-                Status acara
-              </label>
-
-=======
                 Batas Kuota Peserta
               </label>
               <input
@@ -664,7 +589,6 @@ export default function AdminEventDetailPage() {
               <label className="block text-xs font-semibold text-slate-600 mb-1">
                 Status Acara
               </label>
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
               <div className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm bg-slate-50">
                 <span
                   className={`font-semibold ${
@@ -703,11 +627,7 @@ export default function AdminEventDetailPage() {
               />
             </div>
 
-<<<<<<< HEAD
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-=======
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
               <div>
                 <label className="block text-xs font-semibold text-slate-600 mb-1">
                   Waktu Mulai
@@ -762,32 +682,11 @@ export default function AdminEventDetailPage() {
                 <img
                   src={thumbPreview || getStorageUrl(event.thumbnail)}
                   alt="Thumbnail"
-<<<<<<< HEAD
-                  className="mt-2 h-24 w-full rounded-lg object-cover border border-slate-200"
-=======
                   className="mt-2 h-28 w-full rounded-lg object-cover border border-slate-200"
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
                 />
               )}
             </div>
 
-<<<<<<< HEAD
-            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-              <label className="flex items-center gap-2 text-sm font-semibold text-slate-800 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={event.has_certificate}
-                  onChange={(e) =>
-                    setEvent({ ...event, has_certificate: e.target.checked })
-                  }
-                />
-                Sertifikat Kepesertaan
-              </label>
-              {event.has_certificate && (
-                <div>
-                  <label className="block text-[11px] text-slate-500 mb-1">
-                    Ganti Template Sertifikat
-=======
             <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
               <div className="flex items-center justify-between gap-2">
                 <label className="flex items-center gap-2 text-sm font-semibold text-slate-800 cursor-pointer">
@@ -817,21 +716,10 @@ export default function AdminEventDetailPage() {
                 <div className="space-y-2">
                   <label className="block text-[11px] text-slate-500">
                     Upload / Ganti Template Sertifikat
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
                   </label>
                   <input
                     type="file"
                     accept="image/*"
-<<<<<<< HEAD
-                    onChange={(e) =>
-                      setNewCertTemplate(e.target.files?.[0] || null)
-                    }
-                    className="block w-full text-xs text-slate-500"
-                  />
-                  {event.certificate_template && (
-                    <p className="text-[11px] text-emerald-700 mt-1">
-                      Template aktif tersimpan di server.
-=======
                     onChange={handleCertTemplateChange}
                     className="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:bg-emerald-50 file:text-emerald-700"
                   />
@@ -844,7 +732,6 @@ export default function AdminEventDetailPage() {
                   ) : (
                     <p className="text-[11px] text-slate-500">
                       Menggunakan desain sertifikat resmi bawaan Eventory.
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
                     </p>
                   )}
                 </div>
@@ -862,24 +749,6 @@ export default function AdminEventDetailPage() {
           </button>
         </form>
 
-<<<<<<< HEAD
-        {/* Kartu QR & Token Presensi */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center text-center">
-          <h3 className="font-bold text-lg text-slate-900">
-            QR &amp; Token Presensi
-          </h3>
-          <p className="text-xs text-slate-500 mt-1 mb-5">
-            QR Code digunakan peserta untuk melakukan presensi selama acara
-            berlangsung. Presensi hanya dapat dilakukan pada rentang waktu
-            pelaksanaan acara.
-          </p>
-
-          <div className="p-4 bg-white border-2 border-slate-100 rounded-2xl shadow-inner">
-            <QRCodeSVG value={event.qr_token} size={180} />
-          </div>
-
-          <div className="w-full mt-5">
-=======
         {/* Kartu QR & Token Presensi (Dengan Unduh PNG & Cetak Poster) */}
         <div
           id="printable-qr-poster"
@@ -897,7 +766,6 @@ export default function AdminEventDetailPage() {
           </div>
 
           <div className="w-full mt-4 print:hidden">
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
             <p className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-1">
               Token Presensi
             </p>
@@ -918,8 +786,6 @@ export default function AdminEventDetailPage() {
                 )}
               </button>
             </div>
-<<<<<<< HEAD
-=======
 
             <div className="grid grid-cols-2 gap-2 mt-3">
               <button
@@ -948,43 +814,11 @@ export default function AdminEventDetailPage() {
             <p className="text-xs font-mono text-slate-500 pt-2">
               Token: {event.qr_token}
             </p>
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
           </div>
         </div>
       </div>
 
       {/* Bagian 2: List Peserta Mendaftar & List Peserta Absen */}
-<<<<<<< HEAD
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-lg flex items-center gap-2 text-slate-900">
-              <Users className="w-5 h-5 text-indigo-600" />
-              Peserta Terdaftar ({participants.length})
-            </h3>
-          </div>
-
-          {participants.length === 0 ? (
-            <p className="text-sm text-slate-400 py-6 text-center">
-              Belum ada peserta yang mendaftar.
-            </p>
-          ) : (
-            <ul className="divide-y divide-slate-100 text-sm">
-              {participants.map((p) => (
-                <li
-                  key={p.id}
-                  className="py-3 flex items-center justify-between gap-3"
-                >
-                  <div>
-                    <p className="font-semibold text-slate-900">
-                      {p.user?.name}{" "}
-                      {p.user?.nim && (
-                        <span className="text-xs font-normal text-slate-500">
-                          ({p.user.nim})
-                        </span>
-                      )}
-                    </p>
-=======
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 print:hidden">
         {/* Kolom Kiri: Peserta Terdaftar + Tombol Tandai Hadir Manual */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
@@ -1036,21 +870,11 @@ export default function AdminEventDetailPage() {
                         </span>
                       )}
                     </div>
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
                     <p className="text-xs text-slate-500">
                       {p.user?.email} &bull; Tiket:{" "}
                       <span className="font-mono">{p.ticket_code}</span>
                     </p>
                   </div>
-<<<<<<< HEAD
-                  <button
-                    onClick={() => handleRemoveParticipant(p.id, p.user?.name)}
-                    className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs text-red-600 hover:bg-red-50 rounded-lg font-medium shrink-0"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    Hapus
-                  </button>
-=======
 
                   <div className="flex items-center gap-1.5 shrink-0">
                     {!p.is_attended && (
@@ -1074,39 +898,21 @@ export default function AdminEventDetailPage() {
                       Hapus
                     </button>
                   </div>
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
                 </li>
               ))}
             </ul>
           )}
         </div>
 
-<<<<<<< HEAD
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-=======
         {/* Kolom Kanan: Peserta Sudah Absen + Tombol Terbitkan / Kirim Sertifikat */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex items-center justify-between gap-2">
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
             <h3 className="font-bold text-lg flex items-center gap-2 text-emerald-700">
               <UserCheck className="w-5 h-5 text-emerald-600" />
               Peserta Sudah Absen ({attended.length})
             </h3>
           </div>
 
-<<<<<<< HEAD
-          {attended.length === 0 ? (
-            <p className="text-sm text-slate-400 py-6 text-center">
-              Belum ada peserta yang melakukan presensi.
-            </p>
-          ) : (
-            <ul className="divide-y divide-slate-100 text-sm">
-              {attended.map((a) => (
-                <li
-                  key={a.id}
-                  className="py-3 flex items-center justify-between gap-3"
-=======
           <div className="relative">
             <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
             <input
@@ -1130,25 +936,12 @@ export default function AdminEventDetailPage() {
                 <li
                   key={a.id}
                   className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5"
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
                 >
                   <div>
                     <p className="font-semibold text-slate-900">
                       {a.user?.name}
                     </p>
                     <p className="text-xs text-slate-500">
-<<<<<<< HEAD
-                      Waktu Absen:{" "}
-                      {new Date(a.attended_at).toLocaleString("id-ID", {
-                        dateStyle: "short",
-                        timeStyle: "short",
-                      })}
-                    </p>
-                  </div>
-                  <span className="text-xs px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg font-mono">
-                    {a.certificate_number || "Hadir"}
-                  </span>
-=======
                       Absen:{" "}
                       {new Date(a.attended_at).toLocaleString("id-ID", {
                         dateStyle: "short",
@@ -1183,18 +976,12 @@ export default function AdminEventDetailPage() {
                       )}
                     </button>
                   )}
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
                 </li>
               ))}
             </ul>
           )}
         </div>
       </div>
-<<<<<<< HEAD
-    </div>
-  );
-}
-=======
 
       {/* Bagian 3: Riwayat Pengumuman Terkirim */}
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 print:hidden">
@@ -1557,4 +1344,3 @@ export default function AdminEventDetailPage() {
     </div>
   );
 }
->>>>>>> 9fd11e5f81e1e95178b63d79b1f3f57a78435aa9
