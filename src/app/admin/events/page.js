@@ -405,7 +405,7 @@ export default function AdminEventsPage() {
                     </div>
                   </td>
                   <td className="p-4">
-                    <span className="px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-600 text-xs font-semibold uppercase">
+                    <span className="px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-600 text-xs font-semibold uppercase text-nowrap">
                       {ev.type}
                     </span>
                   </td>
@@ -427,13 +427,13 @@ export default function AdminEventsPage() {
                   </td>
                   <td className="p-4">
                     <div className="flex items-center gap-2 text-xs">
-                      <span className="inline-flex items-center gap-1 font-semibold text-slate-700">
-                        <Users className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="inline-flex items-center gap-1 font-semibold text-slate-700 text-nowrap">
+                        <Users className="w-3.5 h-3.5 text-slate-400 " />
                         {ev.participants_count || 0}
                         {ev.max_participants ? ` / ${ev.max_participants}` : ""} daftar
                       </span>
                       <span className="text-slate-300">|</span>
-                      <span className="font-semibold text-emerald-700">
+                      <span className="font-semibold text-emerald-700 text-nowrap">
                         {ev.attended_participants_count || 0} absen
                       </span>
                     </div>
