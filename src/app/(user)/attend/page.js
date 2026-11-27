@@ -11,6 +11,45 @@ import {
 } from "lucide-react";
 import api from "@/lib/api";
 
+function getParticipantLocation() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error("Browser tidak mendukung GPS."));
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        resolve({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy,
+        });
+      },
+      (error) => {
+        if (error.code === error.PERMISSION_DENIED) {
+          reject(
+            new Error(
+              "Izin lokasi ditolak. Izinkan akses lokasi untuk melakukan presensi.",
+            ),
+          );
+        } else if (error.code === error.POSITION_UNAVAILABLE) {
+          reject(new Error("Lokasi tidak tersedia. Pastikan GPS aktif."));
+        } else if (error.code === error.TIMEOUT) {
+          reject(new Error("Gagal mendapatkan lokasi. Coba kembali."));
+        } else {
+          reject(new Error("Gagal mengambil lokasi peserta."));
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0,
+      },
+    );
+  });
+}
+
 export default function AttendPage() {
   const router = useRouter();
 
@@ -190,56 +229,68 @@ export default function AttendPage() {
               scannedRef.current = false;
               return;
             }
-stopScanner().finally(async () => {
-  if (!active) return;
+            stopScanner().finally(async () => {
+              if (!active) return;
 
-  try {
-    setLoading(true);
-    setStatus(null);
-    setMessage("");
+              try {
+                setLoading(true);
+                setStatus(null);
+                setMessage("");
 
-    // 1. Validasi QR terlebih dahulu
-    const validation = await api.get(
-      `/events/validate-qr/${encodeURIComponent(token)}`
-    );
+                // 1. Validasi QR terlebih dahulu
+                const validation = await api.get(
+                  `/events/validate-qr/${encodeURIComponent(token)}`,
+                );
 
-    const event = validation.data?.event;
+                const event = validation.data?.event;
 
-    if (!validation.data?.success || !event?.id) {
-      throw new Error(
-        validation.data?.message || "QR Code tidak valid."
-      );
-    }
+                if (!validation.data?.success || !event?.id) {
+                  throw new Error(
+                    validation.data?.message || "QR Code tidak valid.",
+                  );
+                }
 
-    // 2. Proses absensi setelah QR valid
-    const response = await api.post(
-      `/attend/${encodeURIComponent(token)}`
-    );
+                // 2. Ambil lokasi peserta khusus event on-site
+                let locationPayload = {};
 
-    if (!response.data?.success) {
-      throw new Error(
-        response.data?.message || "Absensi gagal diproses."
-      );
-    }
+                if (event.type === "on-site") {
+                  setMessage("Mengambil lokasi GPS...");
 
-    // 3. Simpan ID event dan redirect setelah attend berhasil
-    sessionStorage.setItem(
-      "selected_event_id",
-      String(event.id)
-    );
+                  const location = await getParticipantLocation();
 
-    router.replace("/events/detail");
-  } catch (error) {
-    setStatus("error");
-    setMessage(
-      error.response?.data?.message ||
-      error.message ||
-      "Validasi QR atau absensi gagal."
-    );
-  } finally {
-    setLoading(false);
-  }
-});
+                  locationPayload = {
+                    latitude: location.latitude,
+                    longitude: location.longitude,
+                  };
+                }
+
+                // 3. Kirim absensi beserta lokasi ke backend
+                const response = await api.post(
+                  `/attend/${encodeURIComponent(token)}`,
+                  locationPayload,
+                );
+
+                if (!response.data?.success) {
+                  throw new Error(
+                    response.data?.message || "Absensi gagal diproses.",
+                  );
+                }
+
+                // 4. Simpan ID event dan redirect setelah attend berhasil
+                sessionStorage.setItem("selected_event_id", String(event.id));
+
+                router.replace("/events/detail");
+              } catch (error) {
+                setStatus("error");
+                setMessage(
+                  error.response?.data?.message ||
+                    error.message ||
+                    "Validasi QR atau absensi gagal.",
+                );
+              } finally {
+                setLoading(false);
+              }
+            });
           },
           () => {},
         );

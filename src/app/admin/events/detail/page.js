@@ -103,6 +103,10 @@ export default function AdminEventDetailPage() {
         event_date_input: formatForDateTimeLocal(data.event_date),
         end_date_input: formatForDateTimeLocal(data.end_date),
         max_participants_input: data.max_participants ?? "",
+
+        latitude_input: data.latitude ?? "",
+        longitude_input: data.longitude ?? "",
+        attendance_radius_input: data.attendance_radius ?? 100,
       });
       setParticipants(partRes.data.data || []);
       setAttended(attRes.data.data || []);
@@ -185,6 +189,20 @@ export default function AdminEventDetailPage() {
       formData.append("description", event.description);
       formData.append("type", event.type);
       formData.append("location_or_link", event.location_or_link);
+      formData.append(
+        "latitude",
+        event.type === "on-site" ? event.latitude_input : "",
+      );
+
+      formData.append(
+        "longitude",
+        event.type === "on-site" ? event.longitude_input : "",
+      );
+
+      formData.append(
+        "attendance_radius",
+        event.type === "on-site" ? event.attendance_radius_input : "",
+      );
       formData.append("event_date", event.event_date_input);
       formData.append("end_date", event.end_date_input);
       formData.append("max_participants", event.max_participants_input ?? "");
@@ -235,11 +253,7 @@ export default function AdminEventDetailPage() {
 
   // Terbitkan & Kirim Sertifikat ke Peserta
   const handleIssueOrSendCertificate = async (participantId, name) => {
-    if (
-      !confirm(
-        `Terbitkan / kirim ulang sertifikat digital untuk "${name}"?`,
-      )
-    )
+    if (!confirm(`Terbitkan / kirim ulang sertifikat digital untuk "${name}"?`))
       return;
     setBusyParticipantId(participantId);
     try {
@@ -665,6 +679,90 @@ export default function AdminEventDetailPage() {
                 />
               </div>
             </div>
+            {event.type === "on-site" && (
+              <div className="rounded-xl border border-indigo-100 bg-indigo-50/50 p-4 space-y-4">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800">
+                    Pengaturan Lokasi Presensi
+                  </h3>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Peserta harus berada dalam radius lokasi ini untuk melakukan
+                    absensi QR.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">
+                      Latitude
+                    </label>
+                    <input
+                      type="number"
+                      step="any"
+                      min="-90"
+                      max="90"
+                      required
+                      placeholder="-6.2000000"
+                      value={event.latitude_input ?? ""}
+                      onChange={(e) =>
+                        setEvent({
+                          ...event,
+                          latitude_input: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">
+                      Longitude
+                    </label>
+                    <input
+                      type="number"
+                      step="any"
+                      min="-180"
+                      max="180"
+                      required
+                      placeholder="106.8166667"
+                      value={event.longitude_input ?? ""}
+                      onChange={(e) =>
+                        setEvent({
+                          ...event,
+                          longitude_input: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">
+                    Radius Presensi (meter)
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="5000"
+                    required
+                    placeholder="100"
+                    value={event.attendance_radius_input ?? ""}
+                    onChange={(e) =>
+                      setEvent({
+                        ...event,
+                        attendance_radius_input: e.target.value,
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm"
+                  />
+                  <p className="mt-1 text-xs text-slate-500">
+                    Contoh: 100 berarti peserta harus berada maksimal 100 meter
+                    dari titik lokasi acara.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
@@ -891,7 +989,9 @@ export default function AdminEventDetailPage() {
                     )}
 
                     <button
-                      onClick={() => handleRemoveParticipant(p.id, p.user?.name)}
+                      onClick={() =>
+                        handleRemoveParticipant(p.id, p.user?.name)
+                      }
                       className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs text-red-600 hover:bg-red-50 rounded-lg font-medium"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
